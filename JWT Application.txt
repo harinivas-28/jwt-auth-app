@@ -1,0 +1,115 @@
+Backend Routes:
+User Authentication Routes:
+
+Method-1: POST /auth/signup
+====================
+Registers a new user.
+Request to the route: (sample body parameter)
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+
+Response:
+If email already exists:
+      return res.status(400).json({ message: "Email is already registered" });
+
+If successful insertion:
+    res.status(201).json({ message: "User registered successfully" });
+
+If exception raised:
+    res.status(500).json({ message: "Error registering user", error });
+  }
+
+Method-2: POST /auth/login
+==================
+Logs in an existing user:
+Request to the route: (sample body parameter) 
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+
+Response:
+If user is not exists:
+      return res.status(404).json({ message: "User not found" });
+
+If the password is wrong:
+      return res.status(401).json({ message: "Invalid password" });
+
+If user logged in successfully:
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
+If exception raised:
+    res.status(500).json({ message: "Error logging in", error });
+	
+
+Method-3: GET /auth/protected
+==================
+Protected route to verify authentication.
+Requires a valid JWT token in the Authorization header:
+{
+  "Authorization": "Bearer <JWT_TOKEN>"
+}
+
+Response:
+Success message:
+res.status(200).json({ message: `Hello ${req.user.name}, you accessed a protected route!` });
+
+Failure: 403 Forbidden for an invalid or expired token.
+
+
+
+Frontend Application structure.
+====================
+src/
+├── components/
+│   ├── Signup.js
+│   ├── Login.js
+│   ├── Dashboard.js
+├── App.js
+├── index.js
+
+
+Signup Component:
+----------------------
+A form for user registration with fields for 'name', 'email', 'password' and a button 'Signup' .
+
+On successful signup, display a success message(response message).
+
+Login Component:
+---------------------
+A form for user login with fields for 'email', 'password'
+and a button 'Login'.
+
+On successful login:
+Display a success message (response message).
+Store the JWT token in sessionStorage.
+If login fails, display an appropriate error message.
+
+On logout :
+-------------
+Clear the JWT token from sessionStorage.
+Redirect the user to the Signup page.
+
+Dashboard Component:
+---------------------------
+Displays a welcome message in <h2> tag with the user’s name(John Doe): Welcome to John Doe!
+And a message in <p> tag: You have successfully logged in.
+
+App.js:
+-------
+Displays navigation links for:
+	- Signup	(/signup)
+	- Login (/login)
+	- Dashboard (visible only after login) (/dashboard)
+	- Logout (visible only after login) (a button 'Logout')
