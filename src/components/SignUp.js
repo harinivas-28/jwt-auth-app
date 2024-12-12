@@ -13,7 +13,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://f5b4-2401-4900-4e0b-21d3-7cf1-8ae2-6fcb-4bd4.ngrok-free.app/auth/signup", formData);
+      const response = await axios.post("https://localhost:5000/auth/signup", formData);
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response.data.message || "Error signing up");
